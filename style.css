@@ -1,4 +1,4 @@
-body{
+body {
   display:flex;
   flex-direction:column;
   justify-content: center;
@@ -6,5 +6,23 @@ body{
 }
 
 svg {
-  background-color: lightblue
+  background-color: rgb(222, 248, 250)
+}
+
+#title {
+  fill:rgb(81, 62, 62);
+  font-size:1rem;
+}
+
+.bar:hover {
+  fill:rgb(187, 25, 103)
+}
+
+#y-axis, #x-axis {
+  font-size:.5rem;
+  color:grey;
+}
+
+#tooltip {
+  color:grey;
 }
