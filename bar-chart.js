@@ -16,9 +16,6 @@ const padding = 40
 
 let svg = d3.select('svg')
 
-
-
-
 let generateScales = () => {
   yScale = d3.scaleLinear()
   .domain([0, d3.max(graphArr, (d) => {
@@ -49,15 +46,12 @@ let generateScales = () => {
   .range([h-padding, padding])
 }
 
-  let drawCanvas =
-   () => {
+  let drawCanvas = () => {
     svg.attr("width", w)
     svg.attr("height", h)
   }
 
-
 let drawBars =()=>{
-  
   svg.selectAll("rect")
   .data(graphArr)
   .enter()
@@ -73,7 +67,6 @@ let drawBars =()=>{
   .attr("height", (item) => {
   return yScale(item[1])
   })
-
   .attr("x", (item, i)=> {
    return xScale(i);
     })
@@ -87,10 +80,23 @@ let drawBars =()=>{
   return "pink"}
   })
 
+  .on("mouseover", (event, item)=>{
+    drawToolTip.transition()
+    .style("visibility", "visible")
 
+    drawToolTip.text(item[0])
+
+    document.querySelector("#tooltip").setAttribute("data-date", item[0])
+  })
+
+  .on("mouseout", (event, item) => {
+    drawToolTip.transition()
+    .style("visibility", "hidden")
+  })
 }
 
 let generateAxes=()=>{
+
   let xAxis = d3.axisBottom(xAxisScale);
   let yAxis = d3.axisLeft(yAxisScale);
 
@@ -100,14 +106,13 @@ let generateAxes=()=>{
   .attr('id','x-axis')
 
 
-svg.append("g")
-.call(yAxis)
-.attr("transform", "translate (" + (padding) + ", 0)")
-.attr('id','y-axis')
-}
+  svg.append("g")
+  .call(yAxis)
+  .attr("transform", "translate (" + (padding) + ", 0)")
+  .attr('id','y-axis')
+  }
 
 req.open("GET", url, true);
-
 req.onload = () => {
 json = JSON.parse(req.responseText)
 graphArr = json.data
@@ -116,14 +121,19 @@ drawCanvas()
 generateScales()
 drawBars()
 generateAxes()
-
-
-
+//drawToolTip()
 };
 req.send();
 
+let drawToolTip = d3.select("body")
+  .append("div")
+  .attr("id", "tooltip" )
+  .attr("x","40" )
+  .attr("y", "50%")
+  .style("width", "auto")
+  .style("height", "auto")
+  .attr("fill", "red")
+  .style("visibility", "hidden")
+  
 
 
-console.log(json)
-console.log(typeof json)
-console.log(graphArr)
